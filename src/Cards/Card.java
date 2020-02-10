@@ -1,3 +1,5 @@
+package Cards;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,7 +26,7 @@ public class Card {
 
     @Override
     public String toString(){
-        return "Card: " + name + color;
+        return "Cards.Card: " + name + color;
     }
 
     public static BufferedImage resize(BufferedImage img, int newW, int newH){

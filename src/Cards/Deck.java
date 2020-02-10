@@ -1,3 +1,5 @@
+package Cards;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,18 +10,18 @@ public class Deck {
         completeDeck();
     }
 
-    List<Card> getTwoCards(){
-        List<Card> twoCards = new ArrayList<>();
+    public List<Card> drawCards(){
+        List<Card> cards = new ArrayList<>();
         Random generator = new Random();
         Card card;
-        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < 7; i++){
             card = cardList.get(generator.nextInt(cardList.size()));
-            if(isDrawn(card, twoCards))
+            if(isDrawn(card, cards))
                 i--;
             else
-                twoCards.add(card);
+                cards.add(card);
         }
-        return twoCards;
+        return cards;
     }
 
     private boolean isDrawn(Card card, List<Card> cards){

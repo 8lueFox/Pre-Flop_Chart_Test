@@ -1,6 +1,4 @@
-package panels;
-
-import panels.GamePanel;
+package Panels;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,18 +16,19 @@ public class TopPanel extends JPanel implements ActionListener {
     private JRadioButton SBRadioButton;
     private ButtonGroup positionRadioGroup;
     private String selectedRadio;
+    private JPanel gamePanel;
 
     public TopPanel(){
         pokerLabel = new JLabel("Poker Texas Holdem");
         pokerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pokerLabel.setFont(new Font("Serif", Font.PLAIN, 20));
         typeComboBox = new JComboBox<>();
-        typeComboBox.setPreferredSize(new Dimension(300,20));
+        typeComboBox.setPreferredSize(new Dimension(300,40));
         typeComboBox.addItem("-- Choose type --");
         typeComboBox.addItem("RFI");
         typeComboBox.addItem("RFI, 3BET");
         typeComboBox.addActionListener(this);
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(20,20));
         add(pokerLabel, BorderLayout.NORTH);
         add(typeComboBox, BorderLayout.CENTER);
     }
@@ -44,6 +43,8 @@ public class TopPanel extends JPanel implements ActionListener {
             if(selectedIndex != 0){
                 addButtons();
             }
+            if(gamePanel != null)
+                remove(gamePanel);
         }
         else if(source instanceof JRadioButton){
             System.out.println("Radio's choose: " + ((JRadioButton) source).getText());
@@ -58,6 +59,8 @@ public class TopPanel extends JPanel implements ActionListener {
             }else if(source == BBRadioButton){
                 selectedRadio = "BB";
             }
+            if(selectedIndex != 0)
+                setGamePanel();
         }
     }
 
@@ -87,12 +90,15 @@ public class TopPanel extends JPanel implements ActionListener {
         buttonsPanel.add(SBRadioButton);
         buttonsPanel.add(BBRadioButton);
 
-        add(buttonsPanel, BorderLayout.SOUTH);
+        add(buttonsPanel, BorderLayout.EAST);
         revalidate();
     }
 
     private void setGamePanel(){
-        add(new GamePanel(selectedIndex, selectedRadio));
+        if(gamePanel != null)
+            remove(gamePanel);
+        gamePanel = new GamePanel(selectedIndex, selectedRadio);
+        add(gamePanel, BorderLayout.PAGE_END);
         revalidate();
     }
 }

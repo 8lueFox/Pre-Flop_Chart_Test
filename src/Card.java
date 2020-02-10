@@ -1,6 +1,6 @@
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +13,8 @@ public class Card {
         this.name = name;
         this.color = color;
         try {
-            this.image = ImageIO.read(new File("./cards/" + name + color + ".png"));
+            image = ImageIO.read(new File("./cards/" + name + color + ".png"));
+            image = resize(image, 172,264);
         }catch (IOException ignored){}
     }
 
@@ -24,5 +25,16 @@ public class Card {
     @Override
     public String toString(){
         return "Card: " + name + color;
+    }
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH){
+        Image tmp = img.getScaledInstance(newW, newH, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
     }
 }

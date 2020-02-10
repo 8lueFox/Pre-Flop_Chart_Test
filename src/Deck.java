@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-class Deck {
+public class Deck {
     private List<Card> cardList;
 
-    Deck(){
+    public Deck(){
         completeDeck();
     }
 

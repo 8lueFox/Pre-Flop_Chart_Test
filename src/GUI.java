@@ -1,53 +1,45 @@
+import panels.TopPanel;
+
 import javax.swing.*;
-import java.util.List;
+import java.awt.*;
 
 public class GUI extends JFrame{
     private JPanel mainPanel;
-    private JLabel mainLabel;
-    private JComboBox typeComboBox;
-    private JRadioButton UTGRadioButton;
-    private JRadioButton UTG1RadioButton;
-    private JRadioButton CORadioButton;
-    private JRadioButton BBRadioButton;
-    private JRadioButton SBRadioButton;
+    private JPanel topPanel;
+    private JPanel leftCardPanel;
+    private JPanel rightCardPanel;
+    private JPanel buttonsPanel;
     private JButton foldButton;
     private JButton raiseButton;
     private JButton checkButton;
-    private JPanel leftCard;
-    private JPanel rightCard;
 
-    private ButtonGroup positionRadioGroup;
     private Deck deck;
 
     public GUI(){
         deck = new Deck();
-
-        setTitle("Poker Texas Holdem");
+        init();
         setSize(600,500);
+        setLayout(new BorderLayout(5, 5));
+        topPanel = new TopPanel();
+        mainPanel.add(topPanel, BorderLayout.PAGE_START);
+
         add(mainPanel);
-
-        positionRadioGroup = new ButtonGroup();
-        positionRadioGroup.add(UTGRadioButton);
-        positionRadioGroup.add(UTG1RadioButton);
-        positionRadioGroup.add(CORadioButton);
-        positionRadioGroup.add(BBRadioButton);
-        positionRadioGroup.add(SBRadioButton);
-
-        typeComboBox.addItem("RFI");
-        typeComboBox.addItem("RFI, 3BET");
-
-        setCardsOnTable(deck.getTwoCards());
+        setVisible(true);
     }
 
-    private void setCardsOnTable(List<Card> cards){
-        CardPanel panelLeft = new CardPanel(cards.get(0).getImage());
-        CardPanel panelRight = new CardPanel(cards.get(1).getImage());
-
-        leftCard = panelLeft;
-        rightCard = panelRight;
-
-        add(leftCard);
-        add(rightCard);
+    private void init(){
+        mainPanel = new JPanel();
+        topPanel = new JPanel();
+        leftCardPanel = new JPanel();
+        rightCardPanel = new JPanel();
+        buttonsPanel = new JPanel();
+        foldButton = new JButton("Fold");
+        raiseButton = new JButton("Raise");
+        checkButton = new JButton("Check");
+        setTitle("Poker Texas Holdem");
     }
 
+    public static void main(String[] args) {
+        GUI gui = new GUI();
+    }
 }

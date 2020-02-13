@@ -11,7 +11,7 @@ public class Card {
     private String color;
     private BufferedImage image;
 
-    Card(String name, String color) {
+    public Card(String name, String color) {
         this.name = name;
         this.color = color;
         try {

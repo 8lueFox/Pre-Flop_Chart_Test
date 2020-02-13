@@ -9,9 +9,9 @@ public class GUI extends JFrame{
 
     public GUI(){
         init();
-        setSize(1000,800);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(false);
+        setSize(1000,600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout(5, 5));
         topPanel = new TopPanel();
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
@@ -27,6 +27,6 @@ public class GUI extends JFrame{
     }
 
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        new GUI();
     }
 }

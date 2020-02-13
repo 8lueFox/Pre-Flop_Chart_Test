@@ -7,8 +7,7 @@ public class Event {
     private boolean isSame;
 
     public Event(String date){
-        String result[] = null;
-        result = date.split(";");
+        String result[] = date.split(";");
         if(result.length == 4){
             card1 = result[0];
             card2 = result[1];

@@ -14,7 +14,7 @@ public class Deck {
         List<Card> cards = new ArrayList<>();
         Random generator = new Random();
         Card card;
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 2; i++){
             card = cardList.get(generator.nextInt(cardList.size()));
             if(isDrawn(card, cards))
                 i--;

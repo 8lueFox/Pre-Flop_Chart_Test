@@ -29,7 +29,7 @@ public class Card {
         return "Cards.Card: " + name + color;
     }
 
-    public static BufferedImage resize(BufferedImage img, int newW, int newH){
+    private static BufferedImage resize(BufferedImage img, int newW, int newH){
         Image tmp = img.getScaledInstance(newW, newH, BufferedImage.TYPE_INT_ARGB);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
 

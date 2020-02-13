@@ -1,7 +1,6 @@
 package Panels;
 
 import Cards.Card;
-import Cards.Deck;
 import Core.Event;
 import Core.FileLoader;
 
@@ -9,57 +8,39 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
-    private JPanel firstCardOnTable;
-    private JPanel secondCardOnTable;
-    private JPanel thirdCardOnTable;
-    private JPanel fourthCardOnTable;
-    private JPanel fifthCardOnTable;
     private JPanel firstCardInHand;
     private JPanel secondCardInHand;
-    private JPanel cardOnTablePanel;
     private JPanel cardInHandPanel;
     private JButton foldButton;
-    private JButton checkButton;
+    private JButton callButton;
     private JButton raiseButton;
+    private JButton allInButton;
     private JLabel scoreLabel;
-
-    private int selectedType;
+    private String selectedType;
     private int answers, answersGood;
-    private String selectedRadio;
-    private Deck deck;
-    private List<Card> cards;
+    private String selectedRadioPosition;
+    private String selectedRadioRaise;
+    private String selectedRadioCall;
     private List<Event> events;
     private int lastEvent = -1;
 
-    GamePanel(int selectedType, String selectedRadio){
+    GamePanel(String selectedType, String selectedRadioPosition, String selectedRadioRaise, String selectedRadioCall){
         this.selectedType = selectedType;
-        this.selectedRadio = selectedRadio;
-        deck = new Deck();
+        this.selectedRadioPosition = selectedRadioPosition;
+        this.selectedRadioRaise = selectedRadioRaise;
+        this.selectedRadioCall = selectedRadioCall;
         answers = 0;
         answersGood = 0;
 
         setLayout(new BorderLayout());
 
-        cardOnTablePanel = new JPanel();
-        cardOnTablePanel.setPreferredSize(new Dimension(885,264));
-        cardOnTablePanel.setLayout(new FlowLayout(5));
-//        cardOnTablePanel.add(firstCardOnTable);
-//        cardOnTablePanel.add(secondCardOnTable);
-//        cardOnTablePanel.add(thirdCardOnTable);
-//        cardOnTablePanel.add(fourthCardOnTable);
-//        cardOnTablePanel.add(fifthCardOnTable);
-        add(cardOnTablePanel, BorderLayout.NORTH);
-
         cardInHandPanel = new JPanel();
         cardInHandPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         setUpCards();
-//        cardInHandPanel.add(firstCardInHand);
-//        cardInHandPanel.add(secondCardInHand);
         add(cardInHandPanel, BorderLayout.CENTER);
 
         JPanel buttonsPanel = new JPanel();
@@ -67,20 +48,25 @@ public class GamePanel extends JPanel implements ActionListener {
         foldButton = new JButton("Fold");
         foldButton.setPreferredSize(new Dimension(150, 30));
         foldButton.setBackground(new Color(255,55,33,255));
-        checkButton = new JButton("Check");
-        checkButton.setBackground(new Color(16,255,29,255));
-        checkButton.setPreferredSize(new Dimension(150,30));
+        callButton = new JButton("Call");
+        callButton.setBackground(new Color(16,255,29,255));
+        callButton.setPreferredSize(new Dimension(150,30));
         raiseButton = new JButton("Raise");
         raiseButton.setBackground(new Color(255,253,32,255));
         raiseButton.setPreferredSize(new Dimension(150,30 ));
+        allInButton = new JButton("All in");
+        allInButton.setBackground(new Color(30, 117, 216,255));
+        allInButton.setPreferredSize(new Dimension(150,30 ));
         foldButton.addActionListener(this);
         raiseButton.addActionListener(this);
-        checkButton.addActionListener(this);
+        callButton.addActionListener(this);
+        allInButton.addActionListener(this);
         scoreLabel = new JLabel(answersGood + " / " + answers);
         scoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
         buttonsPanel.add(foldButton);
-        buttonsPanel.add(checkButton);
+        buttonsPanel.add(callButton);
         buttonsPanel.add(raiseButton);
+        buttonsPanel.add(allInButton);
         buttonsPanel.add(scoreLabel);
         add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -93,17 +79,22 @@ public class GamePanel extends JPanel implements ActionListener {
         if(source instanceof JButton){
             if(source == raiseButton){
                 answers++;
-                if(events.get(lastEvent).getCorrectChoose().equals("Raise"))
+                if(events.get(lastEvent).checkDecision("Raise"))
                     answersGood++;
                 setAgainCards();
-            }else if(source == checkButton){
+            }else if(source == callButton){
                 answers++;
-                if(events.get(lastEvent).getCorrectChoose().equals("Check"))
+                if(events.get(lastEvent).checkDecision("Check"))
                     answersGood++;
                 setAgainCards();
             }else if(source == foldButton){
                 answers++;
-                if(events.get(lastEvent).getCorrectChoose().equals("Fold"))
+                if(events.get(lastEvent).checkDecision("Fold"))
+                    answersGood++;
+                setAgainCards();
+            }else if(source == allInButton){
+                answers++;
+                if(events.get(lastEvent).checkDecision("All in"))
                     answersGood++;
                 setAgainCards();
             }
@@ -114,25 +105,15 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     private void setUpCards(){
-//        cards = deck.drawCards();
-//        firstCardOnTable = new CardPanel(cards.get(0).getImage());
-//        secondCardOnTable = new CardPanel(cards.get(1).getImage());
-//        thirdCardOnTable = new CardPanel(cards.get(2).getImage());
-//        fourthCardOnTable = new CardPanel(cards.get(3).getImage());
-//        fifthCardOnTable = new CardPanel(cards.get(4).getImage());
-//        firstCardInHand = new CardPanel(cards.get(5).getImage());
-//        secondCardInHand = new CardPanel(cards.get(6).getImage());
         FileLoader loader = new FileLoader();
-        events = loader.loadFile("RFI/UTG.txt");
+        events = loader.loadFile(selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt");
+        if(events.size() == 0){
+            JOptionPane.showConfirmDialog(this, "Kombinacja: " + selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt" + " nie może zostać załadowana", "Error: Błędna kombinacja", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+        }
         setAgainCards();
     }
 
     private void setAgainCards(){
-//        cardOnTablePanel.remove(firstCardOnTable);
-//        cardOnTablePanel.remove(secondCardOnTable);
-//        cardOnTablePanel.remove(thirdCardOnTable);
-//        cardOnTablePanel.remove(fourthCardOnTable);
-//        cardOnTablePanel.remove(fifthCardOnTable);
         if(firstCardInHand != null) {
             cardInHandPanel.remove(firstCardInHand);
             cardInHandPanel.remove(secondCardInHand);

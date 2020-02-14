@@ -26,6 +26,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private String selectedRadioRaise;
     private String selectedRadioCall;
     private List<Event> events;
+    private List<Event> pomEvents;
     private int lastEvent = -1;
 
     GamePanel(String selectedType, String selectedRadioPosition, String selectedRadioRaise, String selectedRadioCall){
@@ -107,6 +108,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private void setUpCards(){
         FileLoader loader = new FileLoader();
         events = loader.loadFile(selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt");
+        pomEvents = events;
         if(events.size() == 0){
             JOptionPane.showConfirmDialog(this, "Kombinacja: " + selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt" + " nie może zostać załadowana", "Error: Błędna kombinacja", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
         }
@@ -118,18 +120,21 @@ public class GamePanel extends JPanel implements ActionListener {
             cardInHandPanel.remove(firstCardInHand);
             cardInHandPanel.remove(secondCardInHand);
         }
+        if(pomEvents.size() == 0){
+            pomEvents = events;
+        }
 
-        String colors[] = {"C","D","H","S"};
+        String []colors = {"C","D","H","S"};
         Random random = new Random();
         int pom;
         do {
-            pom = random.nextInt(events.size());
+            pom = random.nextInt(pomEvents.size());
         }while(pom == lastEvent);
         Card card1, card2;
-        String c1 = events.get(pom).getCard1();
-        String c2 = events.get(pom).getCard2();
+        String c1 = pomEvents.get(pom).getCard1();
+        String c2 = pomEvents.get(pom).getCard2();
         String color;
-        if(events.get(pom).isSame()){
+        if(pomEvents.get(pom).isSame()){
             color = colors[random.nextInt(3)];
             card1 = new Card(c1,color);
             card2 = new Card(c2, color);

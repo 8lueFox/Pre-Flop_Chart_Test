@@ -79,7 +79,7 @@ J;9;s;Raise
 A;8;s;Fold
 K;8;s;Fold
 Q;8;s;Fold
-J;8:s;Fold
+J;8;s;Fold
 10;8;s;Fold
 9;8;s;Fold
 8;8;o;Call

@@ -48,7 +48,7 @@ J;9;s;Raise
 A;8;s;Call
 K;8;s;Call
 Q;8;s;Call
-J;8:s;Raise
+J;8;s;Raise
 10;8;s;Call
 8;8;o;Call
 8;7;o;Fold

@@ -154,7 +154,7 @@ public class TopPanel extends JPanel implements ActionListener {
         selectedRadioCall = "";
         selectedRadioRaise = "";
         buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new FlowLayout());
+        buttonsPanel.setLayout(new BorderLayout());
         switch (selectedIndex){
             case 1:
                 addPositionButtons();
@@ -198,15 +198,20 @@ public class TopPanel extends JPanel implements ActionListener {
         positionRadioGroup.add(BTNRadioButton);
         positionRadioGroup.add(BBRadioButton);
         positionRadioGroup.add(SBRadioButton);
-
+        JPanel bPanel = new JPanel();
+        JPanel pomPanel = new JPanel();
+        bPanel.setLayout(new BorderLayout());
+        pomPanel.setLayout(new FlowLayout());
         JLabel positionLabel = new JLabel("Position: ");
         positionLabel.setFont(mediumBoldFont);
-        buttonsPanel.add(positionLabel);
-        buttonsPanel.add(UTGRadioButton);
-        buttonsPanel.add(UTG1RadioButton);
-        buttonsPanel.add(CORadioButton);
-        buttonsPanel.add(SBRadioButton);
-        buttonsPanel.add(BBRadioButton);
+        bPanel.add(positionLabel, BorderLayout.NORTH);
+        pomPanel.add(UTGRadioButton);
+        pomPanel.add(UTG1RadioButton);
+        pomPanel.add(CORadioButton);
+        pomPanel.add(SBRadioButton);
+        pomPanel.add(BBRadioButton);
+        bPanel.add(pomPanel, BorderLayout.CENTER);
+        buttonsPanel.add(bPanel, BorderLayout.NORTH);
     }
 
     private void addRaiseButtons(){
@@ -229,15 +234,20 @@ public class TopPanel extends JPanel implements ActionListener {
         raiseRadioGroup.add(BTNRadioRaiseButton);
         raiseRadioGroup.add(SBRadioRaiseButton);
         raiseRadioGroup.add(BBRadioRaiseButton);
-        JLabel raiseLabel = new JLabel("Raise: ");
-        raiseLabel.setFont(mediumBoldFont);
-        buttonsPanel.add(raiseLabel);
-        buttonsPanel.add(UTG1RadioRaiseButton);
-        buttonsPanel.add(UTGRadioRaiseButton);
-        buttonsPanel.add(CORadioRaiseButton);
-        buttonsPanel.add(BTNRadioRaiseButton);
-        buttonsPanel.add(SBRadioRaiseButton);
-        buttonsPanel.add(BBRadioRaiseButton);
+        JPanel bPanel = new JPanel();
+        JPanel pomPanel = new JPanel();
+        bPanel.setLayout(new BorderLayout());
+        pomPanel.setLayout(new FlowLayout());
+        JLabel positionLabel = new JLabel("Raise: ");
+        positionLabel.setFont(mediumBoldFont);
+        bPanel.add(positionLabel, BorderLayout.NORTH);
+        pomPanel.add(UTGRadioRaiseButton);
+        pomPanel.add(UTG1RadioRaiseButton);
+        pomPanel.add(CORadioRaiseButton);
+        pomPanel.add(SBRadioRaiseButton);
+        pomPanel.add(BBRadioRaiseButton);
+        bPanel.add(pomPanel, BorderLayout.CENTER);
+        buttonsPanel.add(bPanel, BorderLayout.CENTER);
     }
 
     private void addCallButtons(){
@@ -260,14 +270,19 @@ public class TopPanel extends JPanel implements ActionListener {
         callRadioGroup.add(BTNRadioRaiseButton);
         callRadioGroup.add(SBRadioRaiseButton);
         callRadioGroup.add(BBRadioRaiseButton);
-        JLabel callLabel = new JLabel("Call: ");
-        callLabel.setFont(mediumBoldFont);
-        buttonsPanel.add(callLabel);
-        buttonsPanel.add(UTGRadioCallButton);
-        buttonsPanel.add(UTG1RadioCallButton);
-        buttonsPanel.add(CORadioCallButton);
-        buttonsPanel.add(BTNRadioCallButton);
-        buttonsPanel.add(SBRadioCallButton);
-        buttonsPanel.add(BBRadioCallButton);
+        JPanel bPanel = new JPanel();
+        JPanel pomPanel = new JPanel();
+        bPanel.setLayout(new BorderLayout());
+        pomPanel.setLayout(new FlowLayout());
+        JLabel positionLabel = new JLabel("Call: ");
+        positionLabel.setFont(mediumBoldFont);
+        bPanel.add(positionLabel, BorderLayout.NORTH);
+        pomPanel.add(UTGRadioCallButton);
+        pomPanel.add(UTG1RadioCallButton);
+        pomPanel.add(CORadioCallButton);
+        pomPanel.add(SBRadioCallButton);
+        pomPanel.add(BBRadioCallButton);
+        bPanel.add(pomPanel, BorderLayout.CENTER);
+        buttonsPanel.add(bPanel, BorderLayout.SOUTH);
     }
 }

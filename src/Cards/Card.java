@@ -12,11 +12,11 @@ public class Card {
     private BufferedImage image;
 
     public Card(String name, String color) {
-        this.name = name;
-        this.color = color;
+        this.name = name.toLowerCase();
+        this.color = color.toLowerCase();
         try {
-            image = ImageIO.read(new File("./cards/" + name + color + ".png"));
-            image = resize(image, 172,264);
+            image = ImageIO.read(new File("./cards_rsz/rsz_" + name + color + ".png"));
+            image = resize(image, 173,264);
         }catch (IOException ignored){}
     }
 
@@ -30,13 +30,10 @@ public class Card {
     }
 
     private static BufferedImage resize(BufferedImage img, int newW, int newH){
-        Image tmp = img.getScaledInstance(newW, newH, BufferedImage.TYPE_INT_ARGB);
-        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = dimg.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-
+        BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
+        Graphics2D graphics2D = dimg.createGraphics();
+        graphics2D.drawImage(img, 0,0, newW, newH, null);
+        graphics2D.dispose();
         return dimg;
     }
 }

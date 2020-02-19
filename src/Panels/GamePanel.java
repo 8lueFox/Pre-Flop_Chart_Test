@@ -28,6 +28,9 @@ public class GamePanel extends JPanel implements ActionListener {
     private List<Event> events;
     private List<Event> pomEvents;
     private int lastEvent = -1;
+    private String smallerSpaceThan10 = "                                ";
+    private String smallerSpaceThan100 = "                              ";
+    private String smallerSpaceThan1000 = "                            ";
 
     GamePanel(String selectedType, String selectedRadioPosition, String selectedRadioRaise, String selectedRadioCall){
         this.selectedType = selectedType;
@@ -43,34 +46,36 @@ public class GamePanel extends JPanel implements ActionListener {
         cardInHandPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         setUpCards();
         add(cardInHandPanel, BorderLayout.CENTER);
-
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        foldButton = new JButton("Fold");
-        foldButton.setPreferredSize(new Dimension(150, 30));
-        foldButton.setBackground(new Color(255,55,33,255));
-        callButton = new JButton("Call");
-        callButton.setBackground(new Color(16,255,29,255));
-        callButton.setPreferredSize(new Dimension(150,30));
-        raiseButton = new JButton("Raise");
-        raiseButton.setBackground(new Color(255,253,32,255));
-        raiseButton.setPreferredSize(new Dimension(150,30 ));
-        allInButton = new JButton("All in");
-        allInButton.setBackground(new Color(30, 117, 216,255));
-        allInButton.setPreferredSize(new Dimension(150,30 ));
-        foldButton.addActionListener(this);
-        raiseButton.addActionListener(this);
-        callButton.addActionListener(this);
-        allInButton.addActionListener(this);
-        scoreLabel = new JLabel(answersGood + " / " + answers);
-        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-        buttonsPanel.add(foldButton);
-        buttonsPanel.add(callButton);
-        buttonsPanel.add(raiseButton);
-        buttonsPanel.add(allInButton);
-        buttonsPanel.add(scoreLabel);
-        add(buttonsPanel, BorderLayout.SOUTH);
-
+        if(events.size() != 0) {
+            JPanel buttonsPanel = new JPanel();
+            JPanel pomPanel = new JPanel();
+            pomPanel.setLayout(new BorderLayout());
+            buttonsPanel.setLayout(new FlowLayout(10,30,10));
+            foldButton = new JButton("Fold");
+            foldButton.setPreferredSize(new Dimension(150, 30));
+            callButton = new JButton("Call");
+            callButton.setPreferredSize(new Dimension(150, 30));
+            raiseButton = new JButton("Raise");
+            raiseButton.setPreferredSize(new Dimension(150, 30));
+            allInButton = new JButton("All in");
+            allInButton.setPreferredSize(new Dimension(150, 30));
+            foldButton.addActionListener(this);
+            raiseButton.addActionListener(this);
+            callButton.addActionListener(this);
+            allInButton.addActionListener(this);
+            scoreLabel = new JLabel(smallerSpaceThan10 + answersGood + " / " + answers);
+            scoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
+            JLabel textScoreLabel = new JLabel("Poprawne odpowiedzi / Liczba układów kart");
+            textScoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
+            buttonsPanel.add(raiseButton);
+            buttonsPanel.add(foldButton);
+            buttonsPanel.add(callButton);
+            buttonsPanel.add(allInButton);
+            pomPanel.add(buttonsPanel, BorderLayout.NORTH);
+            pomPanel.add(textScoreLabel, BorderLayout.CENTER);
+            pomPanel.add(scoreLabel, BorderLayout.SOUTH);
+            add(pomPanel, BorderLayout.SOUTH);
+        }
         invalidate();
     }
 
@@ -85,7 +90,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 setAgainCards();
             }else if(source == callButton){
                 answers++;
-                if(events.get(lastEvent).checkDecision("Check"))
+                if(events.get(lastEvent).checkDecision("Call"))
                     answersGood++;
                 setAgainCards();
             }else if(source == foldButton){
@@ -99,7 +104,12 @@ public class GamePanel extends JPanel implements ActionListener {
                     answersGood++;
                 setAgainCards();
             }
-            scoreLabel.setText(answersGood + " / " + answers);
+            if(answersGood < 10)
+                scoreLabel.setText(smallerSpaceThan10 +answersGood + " / " + answers);
+            else if(answersGood < 100)
+                scoreLabel.setText(smallerSpaceThan100 +answersGood + " / " + answers);
+            else if(answersGood < 1000)
+                scoreLabel.setText(smallerSpaceThan1000 +answersGood + " / " + answers);
             this.revalidate();
 
         }
@@ -111,8 +121,10 @@ public class GamePanel extends JPanel implements ActionListener {
         pomEvents = events;
         if(events.size() == 0){
             JOptionPane.showConfirmDialog(this, "Kombinacja: " + selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt" + " nie może zostać załadowana", "Error: Błędna kombinacja", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+        }else{
+            setAgainCards();
         }
-        setAgainCards();
+
     }
 
     private void setAgainCards(){
@@ -150,7 +162,6 @@ public class GamePanel extends JPanel implements ActionListener {
         firstCardInHand = new CardPanel(card1.getImage());
         secondCardInHand = new CardPanel(card2.getImage());
         lastEvent = pom;
-        System.out.println(lastEvent);
         cardInHandPanel.add(firstCardInHand);
         cardInHandPanel.add(secondCardInHand);
     }

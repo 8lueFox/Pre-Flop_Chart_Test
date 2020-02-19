@@ -10,7 +10,7 @@ public class CardPanel extends JPanel {
     public CardPanel(BufferedImage image){
         super();
         this.image = image;
-        Dimension dimension = new Dimension(172,264);
+        Dimension dimension = new Dimension(173,264);
         setPreferredSize(dimension);
     }
 

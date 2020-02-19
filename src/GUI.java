@@ -9,7 +9,7 @@ public class GUI extends JFrame{
 
     public GUI(){
         init();
-        setSize(1000,600);
+        setSize(1000,650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(5, 5));
@@ -23,7 +23,7 @@ public class GUI extends JFrame{
     private void init(){
         mainPanel = new JPanel();
         topPanel = new JPanel();
-        setTitle("Poker Texas Holdem");
+        setTitle("Pre-Flop Chart Test");
     }
 
     public static void main(String[] args) {

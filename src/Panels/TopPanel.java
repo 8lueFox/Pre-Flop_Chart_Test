@@ -36,14 +36,12 @@ public class TopPanel extends JPanel implements ActionListener {
     private String selectedRadioRaise;
     private String selectedRadioCall;
     private JPanel gamePanel;
+    private JPanel topPanel;
 
     public TopPanel(){
         selectedRadioCall = "";
         selectedRadioRaise = "";
         mediumBoldFont = new Font("Serif", Font.BOLD, 16);
-        JLabel pokerLabel = new JLabel("Poker Texas Holdem");
-        pokerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        pokerLabel.setFont(new Font("Serif", Font.PLAIN, 20));
         typeComboBox = new JComboBox<>();
         typeComboBox.setPreferredSize(new Dimension(300,40));
         typeComboBox.addItem("-- Choose type --");
@@ -55,8 +53,9 @@ public class TopPanel extends JPanel implements ActionListener {
         typeComboBox.addItem("RFI vs 3-Bet");
         typeComboBox.addActionListener(this);
         setLayout(new BorderLayout(20,20));
-        add(pokerLabel, BorderLayout.NORTH);
-        add(typeComboBox, BorderLayout.CENTER);
+        topPanel = new JPanel(new FlowLayout());
+        topPanel.add(typeComboBox);
+        add(topPanel, BorderLayout.CENTER);
     }
 
     @Override
@@ -207,6 +206,7 @@ public class TopPanel extends JPanel implements ActionListener {
         bPanel.add(positionLabel, BorderLayout.NORTH);
         pomPanel.add(UTGRadioButton);
         pomPanel.add(UTG1RadioButton);
+        pomPanel.add(BTNRadioButton);
         pomPanel.add(CORadioButton);
         pomPanel.add(SBRadioButton);
         pomPanel.add(BBRadioButton);
@@ -243,6 +243,7 @@ public class TopPanel extends JPanel implements ActionListener {
         bPanel.add(positionLabel, BorderLayout.NORTH);
         pomPanel.add(UTGRadioRaiseButton);
         pomPanel.add(UTG1RadioRaiseButton);
+        pomPanel.add(BTNRadioRaiseButton);
         pomPanel.add(CORadioRaiseButton);
         pomPanel.add(SBRadioRaiseButton);
         pomPanel.add(BBRadioRaiseButton);
@@ -279,6 +280,7 @@ public class TopPanel extends JPanel implements ActionListener {
         bPanel.add(positionLabel, BorderLayout.NORTH);
         pomPanel.add(UTGRadioCallButton);
         pomPanel.add(UTG1RadioCallButton);
+        pomPanel.add(BTNRadioCallButton);
         pomPanel.add(CORadioCallButton);
         pomPanel.add(SBRadioCallButton);
         pomPanel.add(BBRadioCallButton);

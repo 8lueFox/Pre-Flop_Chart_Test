@@ -23,7 +23,7 @@ public class FileLoader {
                 s = fileReader.readLine();
             }while(s != null);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Błąd otwierania pliku: " + filePath);
         } finally {
             if (fileReader != null) {
                 try{

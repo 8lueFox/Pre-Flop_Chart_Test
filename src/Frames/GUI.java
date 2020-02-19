@@ -1,3 +1,5 @@
+package Frames;
+
 import Panels.TopPanel;
 
 import javax.swing.*;

@@ -44,4 +44,12 @@ public class Card {
         graphics2D.dispose();
         return dimg;
     }
+
+    public void resize(int newW, int newH){
+        BufferedImage dimg = new BufferedImage(newW, newH, image.getType());
+        Graphics2D graphics2D = dimg.createGraphics();
+        graphics2D.drawImage(image, 0, 0, newW, newH, null);
+        graphics2D.dispose();
+        image = dimg;
+    }
 }

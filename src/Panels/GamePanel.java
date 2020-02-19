@@ -4,8 +4,10 @@ import Cards.Card;
 import Core.Event;
 import Core.FileLoader;
 import Core.FileSaver;
+import Frames.WrongAnswersFrame;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +22,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private JButton callButton;
     private JButton raiseButton;
     private JButton allInButton;
+    private JButton wrongAnswersButton;
     private JLabel scoreLabel;
     private String selectedType;
     private int answers, answersGood;
@@ -29,9 +32,9 @@ public class GamePanel extends JPanel implements ActionListener {
     private List<Event> events;
     private List<Event> pomEvents;
     private int lastEvent = -1;
-    private String smallerSpaceThan10 = "                                ";
-    private String smallerSpaceThan100 = "                              ";
-    private String smallerSpaceThan1000 = "                            ";
+    private String smallerSpaceThan10 = "                        ";
+    private String smallerSpaceThan100 = "                      ";
+    private String smallerSpaceThan1000 = "                    ";
     private FileSaver fileSaver;
     private Card card1, card2;
 
@@ -44,7 +47,8 @@ public class GamePanel extends JPanel implements ActionListener {
         answersGood = 0;
         fileSaver = new FileSaver();
         fileSaver.clearFile();
-
+        wrongAnswersButton = new JButton("Show wrong answers");
+        wrongAnswersButton.addActionListener(this);
         setLayout(new BorderLayout());
 
         cardInHandPanel = new JPanel();
@@ -70,14 +74,17 @@ public class GamePanel extends JPanel implements ActionListener {
             allInButton.addActionListener(this);
             scoreLabel = new JLabel(smallerSpaceThan10 + answersGood + " / " + answers);
             scoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
-            JLabel textScoreLabel = new JLabel("Poprawne odpowiedzi / Liczba układów kart");
+            JLabel textScoreLabel = new JLabel("Correct answers / All answers");
             textScoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
             buttonsPanel.add(raiseButton);
             buttonsPanel.add(foldButton);
             buttonsPanel.add(callButton);
             buttonsPanel.add(allInButton);
+            JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            infoPanel.add(textScoreLabel);
+            infoPanel.add(wrongAnswersButton);
             pomPanel.add(buttonsPanel, BorderLayout.NORTH);
-            pomPanel.add(textScoreLabel, BorderLayout.CENTER);
+            pomPanel.add(infoPanel, BorderLayout.CENTER);
             pomPanel.add(scoreLabel, BorderLayout.SOUTH);
             add(pomPanel, BorderLayout.SOUTH);
         }
@@ -101,17 +108,25 @@ public class GamePanel extends JPanel implements ActionListener {
                 answers++;
                 if(pomEvents.get(lastEvent).checkDecision("Call"))
                     answersGood++;
+                else
+                    fileSaver.saveBadAnswer(card1, card2, "Call", pomEvents.get(lastEvent).getCorrectChoose());
                 setAgainCards();
             }else if(source == foldButton){
                 answers++;
                 if(pomEvents.get(lastEvent).checkDecision("Fold"))
                     answersGood++;
+                else
+                    fileSaver.saveBadAnswer(card1, card2, "Fold", pomEvents.get(lastEvent).getCorrectChoose());
                 setAgainCards();
             }else if(source == allInButton){
                 answers++;
                 if(pomEvents.get(lastEvent).checkDecision("All in"))
                     answersGood++;
+                else
+                    fileSaver.saveBadAnswer(card1, card2, "All in", pomEvents.get(lastEvent).getCorrectChoose());
                 setAgainCards();
+            }else if(source == wrongAnswersButton){
+                new WrongAnswersFrame();
             }
             if(answersGood < 10)
                 scoreLabel.setText(smallerSpaceThan10 +answersGood + " / " + answers);

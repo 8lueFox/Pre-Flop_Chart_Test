@@ -20,4 +20,9 @@ public class CardPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(image, 0, 0 , this);
     }
+
+    public void setNewSize(int newW, int newH){
+        Dimension dimension = new Dimension(newW, newH);
+        setPreferredSize(dimension);
+    }
 }

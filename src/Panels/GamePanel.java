@@ -3,6 +3,7 @@ package Panels;
 import Cards.Card;
 import Core.Event;
 import Core.FileLoader;
+import Core.FileSaver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,8 @@ public class GamePanel extends JPanel implements ActionListener {
     private String smallerSpaceThan10 = "                                ";
     private String smallerSpaceThan100 = "                              ";
     private String smallerSpaceThan1000 = "                            ";
+    private FileSaver fileSaver;
+    private Card card1, card2;
 
     GamePanel(String selectedType, String selectedRadioPosition, String selectedRadioRaise, String selectedRadioCall){
         this.selectedType = selectedType;
@@ -39,6 +42,8 @@ public class GamePanel extends JPanel implements ActionListener {
         this.selectedRadioCall = selectedRadioCall;
         answers = 0;
         answersGood = 0;
+        fileSaver = new FileSaver();
+        fileSaver.clearFile();
 
         setLayout(new BorderLayout());
 
@@ -79,28 +84,32 @@ public class GamePanel extends JPanel implements ActionListener {
         invalidate();
     }
 
+    // TODO: przy 167 się zacina, napraw to
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if(source instanceof JButton){
             if(source == raiseButton){
                 answers++;
-                if(events.get(lastEvent).checkDecision("Raise"))
+                if(pomEvents.get(lastEvent).checkDecision("Raise"))
                     answersGood++;
+                else
+                    fileSaver.saveBadAnswer(card1, card2, "Raise", pomEvents.get(lastEvent).getCorrectChoose());
                 setAgainCards();
             }else if(source == callButton){
                 answers++;
-                if(events.get(lastEvent).checkDecision("Call"))
+                if(pomEvents.get(lastEvent).checkDecision("Call"))
                     answersGood++;
                 setAgainCards();
             }else if(source == foldButton){
                 answers++;
-                if(events.get(lastEvent).checkDecision("Fold"))
+                if(pomEvents.get(lastEvent).checkDecision("Fold"))
                     answersGood++;
                 setAgainCards();
             }else if(source == allInButton){
                 answers++;
-                if(events.get(lastEvent).checkDecision("All in"))
+                if(pomEvents.get(lastEvent).checkDecision("All in"))
                     answersGood++;
                 setAgainCards();
             }
@@ -110,6 +119,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 scoreLabel.setText(smallerSpaceThan100 +answersGood + " / " + answers);
             else if(answersGood < 1000)
                 scoreLabel.setText(smallerSpaceThan1000 +answersGood + " / " + answers);
+            pomEvents.remove(lastEvent);
             this.revalidate();
 
         }
@@ -140,9 +150,10 @@ public class GamePanel extends JPanel implements ActionListener {
         Random random = new Random();
         int pom;
         do {
-            pom = random.nextInt(pomEvents.size());
+            pom = random.nextInt(pomEvents.size()-1);
+            if(pom < 0 )
+                pom = 0;
         }while(pom == lastEvent);
-        Card card1, card2;
         String c1 = pomEvents.get(pom).getCard1();
         String c2 = pomEvents.get(pom).getCard2();
         String color;

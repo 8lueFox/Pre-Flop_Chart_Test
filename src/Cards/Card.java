@@ -24,6 +24,14 @@ public class Card {
         return image;
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public String getColor(){
+        return color;
+    }
+
     @Override
     public String toString(){
         return "Cards.Card: " + name + color;

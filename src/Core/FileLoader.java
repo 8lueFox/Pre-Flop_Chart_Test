@@ -11,7 +11,6 @@ public class FileLoader {
 
     public List<Event> loadFile(String filePath){
         List<Event> list = new ArrayList<>();
-        filePath = "./charts/" + filePath;
         BufferedReader fileReader = null;
 
         try {

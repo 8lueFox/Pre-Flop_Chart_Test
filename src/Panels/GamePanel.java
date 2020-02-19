@@ -24,11 +24,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private JButton allInButton;
     private JButton wrongAnswersButton;
     private JLabel scoreLabel;
-    private String selectedType;
     private int answers, answersGood;
-    private String selectedRadioPosition;
-    private String selectedRadioRaise;
-    private String selectedRadioCall;
     private List<Event> events;
     private List<Event> pomEvents;
     private int lastEvent = -1;
@@ -37,12 +33,10 @@ public class GamePanel extends JPanel implements ActionListener {
     private String smallerSpaceThan1000 = "                    ";
     private FileSaver fileSaver;
     private Card card1, card2;
+    private String path;
 
-    GamePanel(String selectedType, String selectedRadioPosition, String selectedRadioRaise, String selectedRadioCall){
-        this.selectedType = selectedType;
-        this.selectedRadioPosition = selectedRadioPosition;
-        this.selectedRadioRaise = selectedRadioRaise;
-        this.selectedRadioCall = selectedRadioCall;
+    GamePanel(String path){
+        this.path = path;
         answers = 0;
         answersGood = 0;
         fileSaver = new FileSaver();
@@ -142,10 +136,10 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private void setUpCards(){
         FileLoader loader = new FileLoader();
-        events = loader.loadFile(selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt");
+        events = loader.loadFile(path);
         pomEvents = events;
         if(events.size() == 0){
-            JOptionPane.showConfirmDialog(this, "Kombinacja: " + selectedType+ "/" + selectedRadioRaise + "/" + selectedRadioCall + "/" + selectedRadioPosition +".txt" + " nie może zostać załadowana", "Error: Błędna kombinacja", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showConfirmDialog(this, "Kombinacja: " + path + " nie może zostać załadowana", "Error: Błędna kombinacja", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
         }else{
             setAgainCards();
         }

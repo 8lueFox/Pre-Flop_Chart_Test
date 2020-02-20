@@ -86,8 +86,8 @@ public class WrongAnswersFrame extends JFrame {
             cardPanel2.setNewSize(69,106);
             answersPanel.add(cardPanel1);
             answersPanel.add(cardPanel2);
-            answersPanel.add(new JLabel(badAnswerList.get(i).getGoodAnswer()));
             answersPanel.add(new JLabel(badAnswerList.get(i).getAnswer()));
+            answersPanel.add(new JLabel(badAnswerList.get(i).getGoodAnswer()));
         }
         JScrollPane answersScrollPanel = new JScrollPane(answersPanel);
         add(answersScrollPanel, BorderLayout.CENTER);

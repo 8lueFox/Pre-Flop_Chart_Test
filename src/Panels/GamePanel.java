@@ -26,7 +26,6 @@ public class GamePanel extends JPanel implements ActionListener {
     private JLabel scoreLabel;
     private int answers, answersGood;
     private List<Event> events;
-    private List<Event> pomEvents;
     private int lastEvent = -1;
     private String smallerSpaceThan10 = "                        ";
     private String smallerSpaceThan100 = "                      ";
@@ -93,31 +92,34 @@ public class GamePanel extends JPanel implements ActionListener {
         if(source instanceof JButton){
             if(source == raiseButton){
                 answers++;
-                if(pomEvents.get(lastEvent).checkDecision("Raise"))
+                if(events.get(lastEvent).checkDecision("Raise"))
                     answersGood++;
                 else
-                    fileSaver.saveBadAnswer(card1, card2, "Raise", pomEvents.get(lastEvent).getCorrectChoose());
+                    fileSaver.saveBadAnswer(card1, card2, "Raise", events.get(lastEvent).getCorrectChoose());
                 setAgainCards();
             }else if(source == callButton){
                 answers++;
-                if(pomEvents.get(lastEvent).checkDecision("Call"))
+                if(events.get(lastEvent).checkDecision("Call"))
                     answersGood++;
                 else
-                    fileSaver.saveBadAnswer(card1, card2, "Call", pomEvents.get(lastEvent).getCorrectChoose());
+                    fileSaver.saveBadAnswer(card1, card2, "Call", events.get(lastEvent).getCorrectChoose());
+                events.remove(lastEvent);
                 setAgainCards();
             }else if(source == foldButton){
                 answers++;
-                if(pomEvents.get(lastEvent).checkDecision("Fold"))
+                if(events.get(lastEvent).checkDecision("Fold"))
                     answersGood++;
                 else
-                    fileSaver.saveBadAnswer(card1, card2, "Fold", pomEvents.get(lastEvent).getCorrectChoose());
+                    fileSaver.saveBadAnswer(card1, card2, "Fold", events.get(lastEvent).getCorrectChoose());
+                events.remove(lastEvent);
                 setAgainCards();
             }else if(source == allInButton){
                 answers++;
-                if(pomEvents.get(lastEvent).checkDecision("All in"))
+                if(events.get(lastEvent).checkDecision("All in"))
                     answersGood++;
                 else
-                    fileSaver.saveBadAnswer(card1, card2, "All in", pomEvents.get(lastEvent).getCorrectChoose());
+                    fileSaver.saveBadAnswer(card1, card2, "All in", events.get(lastEvent).getCorrectChoose());
+                events.remove(lastEvent);
                 setAgainCards();
             }else if(source == wrongAnswersButton){
                 new WrongAnswersFrame();
@@ -128,7 +130,6 @@ public class GamePanel extends JPanel implements ActionListener {
                 scoreLabel.setText(smallerSpaceThan100 +answersGood + " / " + answers);
             else if(answersGood < 1000)
                 scoreLabel.setText(smallerSpaceThan1000 +answersGood + " / " + answers);
-            pomEvents.remove(lastEvent);
             this.revalidate();
 
         }
@@ -137,7 +138,6 @@ public class GamePanel extends JPanel implements ActionListener {
     private void setUpCards(){
         FileLoader loader = new FileLoader();
         events = loader.loadFile(path);
-        pomEvents = events;
         if(events.size() == 0){
             JOptionPane.showConfirmDialog(this, "Kombinacja: " + path + " nie może zostać załadowana", "Error: Błędna kombinacja", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
         }else{
@@ -151,22 +151,22 @@ public class GamePanel extends JPanel implements ActionListener {
             cardInHandPanel.remove(firstCardInHand);
             cardInHandPanel.remove(secondCardInHand);
         }
-        if(pomEvents.size() == 0){
-            pomEvents = events;
-        }
-
         String []colors = {"C","D","H","S"};
         Random random = new Random();
+
+        if(events.size() == 0){
+            FileLoader loader = new FileLoader();
+            events = loader.loadFile(path);
+        }
+
         int pom;
         do {
-            pom = random.nextInt(pomEvents.size()-1);
-            if(pom < 0 )
-                pom = 0;
+            pom = random.nextInt(events.size());
         }while(pom == lastEvent);
-        String c1 = pomEvents.get(pom).getCard1();
-        String c2 = pomEvents.get(pom).getCard2();
+        String c1 = events.get(pom).getCard1();
+        String c2 = events.get(pom).getCard2();
         String color;
-        if(pomEvents.get(pom).isSame()){
+        if(events.get(pom).isSame()){
             color = colors[random.nextInt(3)];
             card1 = new Card(c1,color);
             card2 = new Card(c2, color);

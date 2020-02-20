@@ -15,6 +15,8 @@ public class TopPanel extends JPanel implements ActionListener {
     private JPanel panelPom;
     private String selectedType;
     private String path;
+    private int iPosition;
+    private int selectedIndex;
 
     public TopPanel(){
         typeComboBox = new JComboBox<>();
@@ -38,7 +40,7 @@ public class TopPanel extends JPanel implements ActionListener {
         Object source = e.getSource();
 
         if(source == typeComboBox){
-            int selectedIndex = typeComboBox.getSelectedIndex();
+            selectedIndex = typeComboBox.getSelectedIndex();
             switch (selectedIndex){
                 case 1: selectedType = "RFI"; break;
                 case 2: selectedType = "vs RFI"; break;
@@ -47,6 +49,12 @@ public class TopPanel extends JPanel implements ActionListener {
                 case 5: selectedType = "Blind vs Blind (After SB raise)"; break;
                 case 6: selectedType = "RFI vs 3-Bet";
             }
+            if(selectedIndex == 3)
+                iPosition = 2;
+            else if(selectedIndex == 1)
+                iPosition = 0;
+            else
+                iPosition = 1;
 
             path = "./charts/" + selectedType;
             addButtons();
@@ -57,7 +65,7 @@ public class TopPanel extends JPanel implements ActionListener {
             for(Enumeration<AbstractButton> buttons = positionRadioGroup.getElements(); buttons.hasMoreElements();){
                 AbstractButton button = buttons.nextElement();
                 if(button.isSelected()){
-                    String tempPath = path + "/" +button.getText();
+                    String tempPath = path + "/" +button.getText()+".txt";
                     File file = new File(tempPath);
                     if(file.isFile()){
                         setGamePanel(tempPath);
@@ -98,9 +106,30 @@ public class TopPanel extends JPanel implements ActionListener {
         panelPom.setSize(200,50);
         positionRadioGroup = new ButtonGroup();
         JRadioButton radioButton;
+        if(selectedIndex == 3) {
+            if(iPosition == 2) {
+                panelPom.add(new JLabel("Raise: "));
+                iPosition--;
+            }else if(iPosition == 1){
+                panelPom.add(new JLabel("Call: "));
+                iPosition--;
+            }
+            else{
+                panelPom.add(new JLabel("Your's position: "));
+            }
+        }
+        else {
+            if (iPosition == 1) {
+                panelPom.add(new JLabel("Raise: "));
+                iPosition--;
+            } else {
+                panelPom.add(new JLabel("Your's position: "));
+            }
+        }
         if(files != null){
             for(File file : files){
-                radioButton = new JRadioButton(file.getName());
+                String[] pom = file.getName().split("\\.");
+                radioButton = new JRadioButton(pom[0]);
                 radioButton.addActionListener(this);
                 positionRadioGroup.add(radioButton);
                 panelPom.add(radioButton);

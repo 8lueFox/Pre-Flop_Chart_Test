@@ -34,7 +34,7 @@ public class Card {
 
     @Override
     public String toString(){
-        return "Cards.Card: " + name + color;
+        return "Card: " + name + color;
     }
 
     private static BufferedImage resize(BufferedImage img, int newW, int newH){

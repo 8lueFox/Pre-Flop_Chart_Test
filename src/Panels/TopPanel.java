@@ -9,16 +9,23 @@ import java.io.File;
 
 public class TopPanel extends JPanel implements ActionListener {
     private JComboBox<String> typeComboBox;
-    private ButtonGroup positionRadioGroup;
+    private ButtonGroup[] radioGroups;
     private JPanel buttonsPanel;
     private JPanel gamePanel;
     private JPanel panelPom;
+    private JPanel topPanel;
     private String selectedType;
     private String path;
     private int iPosition;
     private int selectedIndex;
+    private int radioGroupsIndex;
+    private String pos0 = "";
+    private String pos1 = "";
+    private String pos2 = "";
 
     public TopPanel(){
+        radioGroups = new ButtonGroup[3];
+        radioGroupsIndex = 0;
         typeComboBox = new JComboBox<>();
         typeComboBox.setPreferredSize(new Dimension(300,40));
         typeComboBox.addItem("-- Choose type --");
@@ -30,11 +37,17 @@ public class TopPanel extends JPanel implements ActionListener {
         typeComboBox.addItem("RFI vs 3-Bet");
         typeComboBox.addActionListener(this);
         setLayout(new BorderLayout(20,20));
-        JPanel topPanel = new JPanel(new FlowLayout());
-        topPanel.add(typeComboBox);
+        topPanel = new JPanel(new BorderLayout());
+        topPanel.setSize(1000,200);
+        JPanel tempPanel = new JPanel(new FlowLayout());
+        tempPanel.add(typeComboBox);
+        buttonsPanel = new JPanel();
+        buttonsPanel.setSize(500,200);
+        tempPanel.setSize(500,200);
+        topPanel.add(tempPanel, BorderLayout.NORTH);
+        topPanel.add(buttonsPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.CENTER);
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -62,50 +75,112 @@ public class TopPanel extends JPanel implements ActionListener {
                 remove(gamePanel);
         }
         else {
-            for(Enumeration<AbstractButton> buttons = positionRadioGroup.getElements(); buttons.hasMoreElements();){
-                AbstractButton button = buttons.nextElement();
-                if(button.isSelected()){
-                    String tempPath = path + "/" +button.getText()+".txt";
-                    File file = new File(tempPath);
-                    if(file.isFile()){
-                        setGamePanel(tempPath);
+            AbstractButton btn;
+            for(Enumeration<AbstractButton> btns = radioGroups[0].getElements(); btns.hasMoreElements();){
+                btn = btns.nextElement();
+                String btnTempText = "/" + btn.getText();
+                if(btn.isSelected() && !pos0.equals("") && !btnTempText.equals(pos0)) {
+                    if(radioGroups[2] != null) {
+                        buttonsPanel.remove(2);
+                        radioGroupsIndex = 2;
+                        radioGroups[2] = null;
+                        pos2 = "";
                     }
-                    else{
-                        path = path + "/" +button.getText();
-                        addRadioButtons();
+                    if(radioGroups[1] != null){
+                        buttonsPanel.remove(1);
+                        radioGroups[1] = null;
+                        pos1 = "";
+                    }
+                    if(selectedIndex == 3){
+                        iPosition = 1;
+                    }else {
+                        iPosition = 0;
+                    }
+                    radioGroupsIndex = 1;
+                    if(gamePanel != null)
+                        remove(gamePanel);
+                    pos0 = "/" + btn.getText();
+                }else if(btn.isSelected()){
+                    if(gamePanel != null)
+                        remove(gamePanel);
+                    pos0 = "/" + btn.getText();
+                }
+            }
+            if(radioGroups[1] != null){
+                for(Enumeration<AbstractButton> btns = radioGroups[1].getElements(); btns.hasMoreElements();){
+                    btn = btns.nextElement();
+                    String btnTempText = "/" + btn.getText();
+                    if(btn.isSelected() && !pos1.equals("") && !btnTempText.equals(pos1)) {
+                        if(radioGroups[2] != null) {
+                            buttonsPanel.remove(2);
+                            radioGroups[2] = null;
+                            pos2 = "";
+                        }
+                        radioGroupsIndex = 2;
+                        iPosition = 0;
+                        if(gamePanel != null)
+                            remove(gamePanel);
+                        pos1 = "/" + btn.getText();
+                    }else if(btn.isSelected()){
+                        if(gamePanel != null)
+                            remove(gamePanel);
+                        pos1 = "/" + btn.getText();
                     }
                 }
             }
+            if(radioGroups[2] != null){
+                for(Enumeration<AbstractButton> btns = radioGroups[2].getElements(); btns.hasMoreElements();){
+                    btn = btns.nextElement();
+                    if(btn.isSelected()) {
+                        if(gamePanel != null)
+                            remove(gamePanel);
+                        pos2 = "/" + btn.getText();
+                    }
+                }
+            }
+            String tempPath = path + pos0 + pos1 + pos2 + ".txt";
+            File file = new File(tempPath);
+            if(file.isFile())
+                setGamePanel(tempPath);
+            else{
+                addRadioButtons2();
+            }
         }
     }
+
 
     private void setGamePanel(String path){
         if(gamePanel != null)
             remove(gamePanel);
         gamePanel = new GamePanel(path);
-        add(gamePanel, BorderLayout.PAGE_END);
+        add(gamePanel, BorderLayout.SOUTH);
         revalidate();
     }
 
     private void addButtons(){
         if(buttonsPanel != null)
-            remove(buttonsPanel);
+            topPanel.remove(buttonsPanel);
         buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BorderLayout());
-        addRadioButtons();
-        add(buttonsPanel, BorderLayout.EAST);
+        radioGroups = new ButtonGroup[3];
+        pos0 = "";
+        pos1 = "";
+        pos2 = "";
+        radioGroupsIndex = 0;
+        addRadioButtons2();
+        topPanel.add(buttonsPanel, BorderLayout.CENTER);
         revalidate();
     }
 
-    private void addRadioButtons(){
-        File directory = new File(path);
+
+    private void addRadioButtons2() {
+        File directory = new File(path + pos0 + pos1 + pos2);
         File[] files = directory.listFiles();
-        if(panelPom != null)
-            buttonsPanel.remove(panelPom);
+
         panelPom = new JPanel(new FlowLayout());
         panelPom.setSize(200,50);
-        positionRadioGroup = new ButtonGroup();
         JRadioButton radioButton;
+        radioGroups[radioGroupsIndex] = new ButtonGroup();
         if(selectedIndex == 3) {
             if(iPosition == 2) {
                 panelPom.add(new JLabel("Raise: "));
@@ -131,11 +206,17 @@ public class TopPanel extends JPanel implements ActionListener {
                 String[] pom = file.getName().split("\\.");
                 radioButton = new JRadioButton(pom[0]);
                 radioButton.addActionListener(this);
-                positionRadioGroup.add(radioButton);
+                radioGroups[radioGroupsIndex].add(radioButton);
                 panelPom.add(radioButton);
             }
+            if(radioGroupsIndex == 0)
+                buttonsPanel.add(panelPom, BorderLayout.NORTH);
+            else if(radioGroupsIndex == 1)
+                buttonsPanel.add(panelPom, BorderLayout.CENTER);
+            else if(radioGroupsIndex == 2)
+                buttonsPanel.add(panelPom, BorderLayout.SOUTH);
+            radioGroupsIndex++;
+            revalidate();
         }
-        buttonsPanel.add(panelPom);
-        revalidate();
     }
 }

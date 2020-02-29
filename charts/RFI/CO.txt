@@ -157,7 +157,7 @@ J;3;s;Fold
 A;2;s;Raise
 K;2;s;Fold
 Q;2;s;Fold
-J;2;S;Fold
+J;2;s;Fold
 10;2;s;Fold
 9;2;s;Fold
 8;2;s;Fold

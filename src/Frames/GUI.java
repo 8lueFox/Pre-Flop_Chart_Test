@@ -17,7 +17,6 @@ public class GUI extends JFrame{
         setLayout(new BorderLayout(5, 5));
         topPanel = new TopPanel();
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
-
         add(mainPanel);
         setVisible(true);
     }

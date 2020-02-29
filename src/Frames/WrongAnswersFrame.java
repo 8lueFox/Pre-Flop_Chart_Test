@@ -8,6 +8,7 @@ import Panels.GamePanel;
 import javax.swing.*;
 import java.awt.*;
 
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -64,17 +65,28 @@ public class WrongAnswersFrame extends JFrame {
     private void displayAnswers(){
         // Header
         JPanel topPanel = new JPanel(new FlowLayout());
-        JLabel label1 = new JLabel("First Card | ");
-        JLabel label2 = new JLabel("Second Card | ");
-        JLabel label3 = new JLabel("Your Answer | ");
-        JLabel label4 = new JLabel("Correct Answer");
-        topPanel.add(label1);
-        topPanel.add(label2);
-        topPanel.add(label3);
-        topPanel.add(label4);
+        if(badAnswerList.size() != 0) {
+            JLabel label1 = new JLabel("First Card | ");
+            JLabel label2 = new JLabel("Second Card | ");
+            JLabel label3 = new JLabel("Your Answer | ");
+            JLabel label4 = new JLabel("Correct Answer");
+            topPanel.add(label1);
+            topPanel.add(label2);
+            topPanel.add(label3);
+            topPanel.add(label4);
+        }else{
+            JLabel emptyLabel = new JLabel("No wrong answers");
+            emptyLabel.setFont(new Font("Serif", Font.BOLD, 20));
+            topPanel.add(emptyLabel);
+            setSize(450, 180);
+        }
         add(topPanel, BorderLayout.NORTH);
         // Body
-        JPanel answersPanel = new JPanel(new GridLayout(badAnswerList.size(), 4));
+        JPanel answersPanel = new JPanel(new GridLayout(badAnswerList.size(), 4, 20, 0));
+        int help = 180 * badAnswerList.size();
+        if(help < 1000 && help != 0){
+            setSize(450, help);
+        }
         for(int i = 0; i < badAnswerList.size(); i++){
             Card cardPom1 = badAnswerList.get(i).getCard1();
             Card cardPom2 = badAnswerList.get(i).getCard2();

@@ -8,6 +8,7 @@ import Frames.WrongAnswersFrame;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,7 +66,7 @@ public class GamePanel extends JPanel implements ActionListener {
             raiseButton.addActionListener(this);
             callButton.addActionListener(this);
             allInButton.addActionListener(this);
-            scoreLabel = new JLabel(smallerSpaceThan10 + answersGood + " / " + answers);
+            scoreLabel = new JLabel("                                                 " + smallerSpaceThan10 + answersGood + " / " + answers);
             scoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
             JLabel textScoreLabel = new JLabel("Correct answers / All answers");
             textScoreLabel.setFont(new Font("Serif", Font.PLAIN, 16));
@@ -73,7 +74,8 @@ public class GamePanel extends JPanel implements ActionListener {
             buttonsPanel.add(foldButton);
             buttonsPanel.add(callButton);
             buttonsPanel.add(allInButton);
-            JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            infoPanel.setBorder(new EmptyBorder(50,0,0,0));
             infoPanel.add(textScoreLabel);
             infoPanel.add(wrongAnswersButton);
             pomPanel.add(buttonsPanel, BorderLayout.NORTH);
@@ -83,8 +85,6 @@ public class GamePanel extends JPanel implements ActionListener {
         }
         invalidate();
     }
-
-    // TODO: przy 167 się zacina, napraw to
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -125,11 +125,11 @@ public class GamePanel extends JPanel implements ActionListener {
                 new WrongAnswersFrame();
             }
             if(answersGood < 10)
-                scoreLabel.setText(smallerSpaceThan10 +answersGood + " / " + answers);
+                scoreLabel.setText("                                                 " + smallerSpaceThan10 +answersGood + " / " + answers);
             else if(answersGood < 100)
-                scoreLabel.setText(smallerSpaceThan100 +answersGood + " / " + answers);
+                scoreLabel.setText("                                                 " + smallerSpaceThan100 +answersGood + " / " + answers);
             else if(answersGood < 1000)
-                scoreLabel.setText(smallerSpaceThan1000 +answersGood + " / " + answers);
+                scoreLabel.setText("                                                 " + smallerSpaceThan1000 +answersGood + " / " + answers);
             this.revalidate();
 
         }
@@ -154,7 +154,7 @@ public class GamePanel extends JPanel implements ActionListener {
         String []colors = {"C","D","H","S"};
         Random random = new Random();
 
-        if(events.size() == 0){
+        if(events.size() == 1){
             FileLoader loader = new FileLoader();
             events = loader.loadFile(path);
         }
